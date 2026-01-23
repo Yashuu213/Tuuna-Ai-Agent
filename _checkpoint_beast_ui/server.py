@@ -257,7 +257,7 @@ def execute_ai_action(action_data):
     return "Action completed."
 
 # --- SYSTEM PROMPT ---
-def ask_gemini_brain(user_command, client_image=None):
+def ask_gemini_brain(user_command):
     """Sends command to Gemini with Auto-Model-Rotation for fallback."""
     if not AI_AVAILABLE:
         return None, "AI Library not installed."
@@ -325,7 +325,7 @@ def ask_gemini_brain(user_command, client_image=None):
     - Cross-App Reasoning: {"action": "reasoning", "target": "Goal"} (Use for COMPLEX MULTI-STEP flows like "Read my email and schedule the meeting" or "Find the error in this log and fix it". This triggers a self-correcting agent loop.)
 
     VISION CAPABILITY:
-    - You can SEE the user's screen or camera feed. If the user asks "What's on my screen" or "Look at this", I will provide an image.
+    - You can SEE the user's screen. If the user asks "What's on my screen" or "Look at this", I will provide an image.
     - If an image is provided, analyze it and answer the user's question.
 
     CURRENT LONG-TERM MEMORY:
@@ -340,16 +340,13 @@ def ask_gemini_brain(user_command, client_image=None):
     final_prompt = system_prompt.replace("{memory_context}", memory_context)
 
     # --- VISION CHECK ---
-    vision_keywords = ["look", "see", "screen", "vision", "watch", "display", "monitor", "this", "read"]
+    vision_keywords = ["look", "see", "screen", "vision", "watch", "display", "monitor"]
     clipboard_keywords = ["clipboard", "copied", "paste"]
     
     content_payload = final_prompt + user_command
     
-    if client_image:
-        print("📸 Using Client Webcam Image...")
-        content_payload = [final_prompt + user_command, {"mime_type": "image/jpeg", "data": client_image.split(",")[1] if "," in client_image else client_image}]
-    elif any(k in user_command.lower() for k in vision_keywords):
-        print("👀 Vision Request Detected (Screen)...")
+    if any(k in user_command.lower() for k in vision_keywords):
+        print("👀 Vision Request Detected...")
         screenshot = get_screenshot()
         if screenshot:
             content_payload = [final_prompt + user_command, screenshot]
@@ -396,16 +393,14 @@ def home():
 def handle_command():
     data = request.json
     command = data.get('command', '').lower()
-    client_image = data.get('client_image', None) # New Field
     
-    print(f"🎤 Received: {command} | Img: {bool(client_image)}")
+    print(f"🎤 Received: {command}")
     
     if not command:
         return jsonify({"response": "I didn't hear anything."})
 
     # ASK BRAIN
-    actions, response_text = ask_gemini_brain(command, client_image)
-
+    actions, response_text = ask_gemini_brain(command)
     
     if actions:
         execution_result = execute_ai_action(actions)

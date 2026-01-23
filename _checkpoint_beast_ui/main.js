@@ -8,18 +8,23 @@ const voiceSelect = document.getElementById('voiceSelect');
 const startBtn = document.getElementById('startBtn');
 
 let silenceTimer;
+
 let voices = [];
 let isListening = false;
 let isSpeaking = false;
-let isProcessing = false;
+let isProcessing = false; // Prevent overlapping commands
 
 // --- Voice Setup ---
 function populateVoices() {
     const allVoices = window.speechSynthesis.getVoices();
     voiceSelect.innerHTML = '';
     voices = [];
+
+    // Prioritize Hindi voices
     const hindiVoices = allVoices.filter(v => v.lang.includes('hi') || v.name.includes('Hindi') || v.name.includes('India'));
     const englishVoices = allVoices.filter(v => (v.lang.includes('en') && !v.lang.includes('hi')) && !hindiVoices.includes(v));
+
+    // Combine: Hindi first, then English
     const sortedVoices = [...hindiVoices, ...englishVoices];
 
     sortedVoices.forEach((voice) => {
@@ -37,6 +42,7 @@ function populateVoices() {
         voiceSelect.appendChild(option);
     }
 
+    // Auto-select a Hindi voice if available, else a good English one
     const preferredIndex = voices.findIndex(v => v.lang.includes('hi') || v.name.includes('Hindi'));
     if (preferredIndex !== -1) {
         voiceSelect.selectedIndex = preferredIndex;
@@ -55,23 +61,18 @@ function testVoice() {
     console.log("Voice changed to: " + voiceSelect.value);
 }
 
+// --- Helper UI Functions ---
 function toggleHelp() {
-    const modal = document.getElementById('helpModal');
-    if (modal) modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    helpModal.style.display = helpModal.style.display === 'flex' ? 'none' : 'flex';
 }
 
 function logMessage(sender, text, isDebug = false) {
     const bubble = document.createElement('div');
-    bubble.className = `msg ${sender === 'Tuuna' ? 'system' : 'user'}`;
-    bubble.innerText = `${sender === 'Tuuna' ? '[AI]' : '[USER]'} ${text}`;
-
-    // Add time stamp
-    const ts = document.createElement('span');
-    ts.className = 'ts';
-    ts.innerText = '[LOG]';
-    bubble.prepend(ts);
-
+    bubble.className = `chat-bubble ${sender === 'Tuuna' ? 'system' : 'user'}`;
+    bubble.innerText = text; // Secure text insertion
     chatLog.appendChild(bubble);
+
+    // Auto Scroll
     chatLog.scrollTop = chatLog.scrollHeight;
 }
 
@@ -84,28 +85,30 @@ if (!SpeechRecognition) {
 
 const recognition = new SpeechRecognition();
 recognition.continuous = true;
-recognition.lang = 'en-IN';
-recognition.interimResults = true;
+recognition.lang = 'en-IN'; // Works well for Hinglish
+recognition.interimResults = true; // KEY CHANGE: Listen to partial speech
 recognition.maxAlternatives = 1;
 
 recognition.onstart = () => {
     statusText.innerText = "LISTENING...";
-    statusText.style.color = "var(--hud-cyan)";
-    if (orb) orb.classList.add('listening');
-    // CORE
-    if (window.neuralCore) window.neuralCore.setState('LISTENING');
+    statusText.style.color = "var(--primary)";
+    orb.classList.remove('speaking');
+    orb.classList.add('listening');
     isListening = true;
+    startBtn.innerText = "STOP LISTENING";
+    startBtn.classList.remove('primary'); // Change style to indicate active
 };
 
 recognition.onend = () => {
     if (isListening) {
+        // If it stopped but we didn't ask it to, restart it (unless speaking)
         if (!isSpeaking) recognition.start();
     } else {
-        if (orb) orb.classList.remove('listening');
-        // CORE
-        if (window.neuralCore) window.neuralCore.setState('IDLE');
-        statusText.innerText = "STANDBY MODE";
-        statusText.style.color = "var(--hud-green)";
+        orb.classList.remove('listening');
+        statusText.innerText = "SYSTEM STANDBY";
+        statusText.style.color = "#8892b0";
+        startBtn.innerText = "START LISTENING";
+        startBtn.classList.add('primary');
     }
 };
 
@@ -115,75 +118,70 @@ recognition.onerror = (event) => {
 };
 
 recognition.onresult = (event) => {
+    // Clear any existing silence timer
     clearTimeout(silenceTimer);
+
     const lastResult = event.results[event.results.length - 1];
     const transcript = lastResult[0].transcript.trim().toLowerCase();
     const isFinal = lastResult.isFinal;
 
     console.log("Heard (Interim):", transcript);
-    statusText.innerText = `HEARING: "${transcript}"`;
-    statusText.style.color = "var(--hud-cyan)";
 
+    // Show what is being heard immediately for feedback
+    statusText.innerText = `HEARING: "${transcript}"`;
+    statusText.style.color = "var(--primary)";
+
+    // Set a timer: If user stops speaking for 1.5 seconds, assume command is done.
+    // This is much faster than the default ~5-10s timeout.
     silenceTimer = setTimeout(() => {
         if (transcript.length > 0) {
             console.log("Silence detected. Processing command:", transcript);
-            recognition.stop();
+            recognition.stop(); // Warning: this triggers onend
             handleCommandLogic(transcript);
         }
-    }, 2000);
+    }, 2000); // Increased to 2s to reduce accidental triggers
 
     if (isFinal) {
-        clearTimeout(silenceTimer);
+        clearTimeout(silenceTimer); // We got a final result natively
         handleCommandLogic(transcript);
     }
 };
 
 function handleCommandLogic(transcript) {
+    // REMOVED STRICT FILTERS: We now send everything to the AI to decide.
+    // This allows conversational Hindi, follow-up questions, and natural speech.
+
+    // Minimum length check to avoid "um", "ah", or background noise triggers
     if (transcript.length > 5 && !isProcessing) {
         logMessage("User", transcript);
         processCommand(transcript);
     }
 }
 
+// --- Command Processing ---
 async function processCommand(command) {
     if (isProcessing) return;
     isProcessing = true;
     statusText.innerText = "PROCESSING...";
-    // CORE
-    if (window.neuralCore) window.neuralCore.setState('THINKING');
-    if (orb) orb.classList.remove('listening');
-
-    // VISION CAPTURE
-    let clientImage = null;
-    const video = document.getElementById('liveFeed');
-    if (video && video.srcObject && video.readyState >= 2) {
-        try {
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            clientImage = canvas.toDataURL('image/jpeg', 0.7);
-            console.log("Captured Vision Frame");
-        } catch (e) { console.error("Frame Capture Failed", e); }
-    }
+    orb.classList.remove('listening');
 
     try {
         const response = await fetch('/command', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ command: command, client_image: clientImage })
+            body: JSON.stringify({ command: command })
         });
 
         const data = await response.json();
         logMessage("Tuuna", data.response);
         speak(data.response);
 
-
     } catch (error) {
         console.error("Error:", error);
         logMessage("System", "Error connecting to server.");
         statusText.innerText = "ERROR";
-        if (orb) orb.classList.remove('listening');
+        // Reset state so usage can continue
+        orb.classList.remove('listening');
         setTimeout(() => {
             statusText.innerText = "LISTENING...";
             if (!isListening) toggleListening();
@@ -193,20 +191,13 @@ async function processCommand(command) {
     }
 }
 
-// --- Speech Synthesis Override (with Hex Logic & Core) ---
+// --- Speech Synthesis ---
 function speak(text) {
-    // Hex Activation
-    activateHex('mod_synth', Math.max(2000, text.length * 50));
-    // CORE
-    if (window.neuralCore) window.neuralCore.setState('SPEAKING');
-
     isSpeaking = true;
-    recognition.stop();
+    recognition.stop(); // Stop listening so it doesn't hear itself
 
-    if (orb) {
-        orb.classList.remove('listening');
-        orb.classList.add('speaking');
-    }
+    orb.classList.remove('listening');
+    orb.classList.add('speaking');
     statusText.innerText = "VOCALIZING...";
 
     const utterance = new SpeechSynthesisUtterance(text);
@@ -219,25 +210,19 @@ function speak(text) {
 
     utterance.onend = () => {
         isSpeaking = false;
-        if (orb) orb.classList.remove('speaking');
+        orb.classList.remove('speaking');
         statusText.innerText = "LISTENING...";
-        // CORE
-        if (window.neuralCore) window.neuralCore.setState('IDLE');
 
+        // Resume listening
         if (isListening) {
-            try {
-                recognition.start();
-                if (window.neuralCore) window.neuralCore.setState('LISTENING');
-            } catch (e) { }
+            try { recognition.start(); } catch (e) { }
         }
-        // Deactivate Hex
-        const synth = document.getElementById('mod_synth');
-        if (synth) synth.classList.remove('active');
     };
 
     window.speechSynthesis.speak(utterance);
 }
 
+// --- User Interaction ---
 function toggleListening() {
     if (isListening) {
         isListening = false;
@@ -256,24 +241,14 @@ function sendManualCommand() {
     const text = manualInput.value;
     if (text) {
         logMessage("User", text);
-        console.log("Manual:", text);
         processCommand(text);
         manualInput.value = "";
     }
 }
 
-// --- HEX GRID LOGIC ---
-const statusOverlay = document.getElementById('statusOverlay');
+const terminalWindow = document.getElementById('terminalWindow');
 
-function activateHex(moduleId, duration = 800) {
-    const el = document.getElementById(moduleId);
-    if (el) {
-        el.classList.add('active');
-        setTimeout(() => el.classList.remove('active'), duration);
-    }
-}
-
-// Polling for Actions/Thoughts
+// --- Log Streaming ---
 setInterval(async () => {
     try {
         const res = await fetch('/stream_logs');
@@ -281,61 +256,25 @@ setInterval(async () => {
 
         if (logs.length > 0) {
             logs.forEach(log => {
-                // Trigger Hex based on log type
-                if (log.type === 'thought') {
-                    activateHex('mod_cortex', 1500);
-                    if (statusOverlay) statusOverlay.innerText = "CORTEX: " + log.msg;
-                    // CORE
-                    if (window.neuralCore) window.neuralCore.setState('THINKING');
-                }
-                if (log.type === 'action') {
-                    activateHex('mod_uplink', 1500);
-                    activateHex('mod_code', 1500);
-                    if (statusOverlay) statusOverlay.innerText = "UPLINK: " + log.msg;
-                }
-                if (log.type === 'error') {
-                    activateHex('mod_secure', 1500);
-                    if (statusOverlay) statusOverlay.innerText = "ERROR: " + log.msg;
-                }
+                const div = document.createElement('div');
+                div.className = `log-entry ${log.type}`;
+                // Special formatting for different log types
+                let icon = "";
+                if (log.type === "thought") icon = "🧠 ";
+                if (log.type === "action") icon = "⚡ ";
+                if (log.type === "error") icon = "❌ ";
+
+                div.innerHTML = `<span style="opacity:0.5">[${log.ts}]</span> ${icon}${log.msg}`;
+                terminalWindow.appendChild(div);
             });
+            // Auto Scroll Terminal
+            terminalWindow.scrollTop = terminalWindow.scrollHeight;
         }
-    } catch (e) { }
-}, 800);
+    } catch (e) {
+        // Silent fail for polling
+    }
+}, 1000); // 1-second poll rate
 
 manualInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") sendManualCommand();
 });
-
-// INIT
-// --- VISION LOGIC ---
-async function initVision() {
-    const video = document.getElementById('liveFeed');
-    const header = document.querySelector('.vision-header');
-    const container = document.querySelector('.vision-container');
-
-    if (!video) return;
-
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-        header.innerText = " REC"; // Space for dot
-        header.removeAttribute('style'); // Use CSS class styles
-        container.classList.add('active');
-
-
-        // Trigger Hex
-        activateHex('mod_vision', 2000);
-    } catch (e) {
-        console.error("Camera Access Denied", e);
-        header.innerText = "SIGNAL LOST";
-        header.style.color = "var(--hud-red)";
-    }
-}
-
-// INIT
-window.onload = () => {
-    if (window.initLiquidCore) window.initLiquidCore();
-    initVision();
-}
-
-

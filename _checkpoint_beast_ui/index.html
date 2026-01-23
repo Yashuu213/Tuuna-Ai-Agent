@@ -48,12 +48,14 @@
                 <div id="status" class="status-readout">STANDBY MODE</div>
             </div>
 
-            <!-- Neural Nexus Core 2.0 -->
-            <div class="core-wrapper">
+            <div class="core-assembly">
                 <div class="encircle ring-outer"></div>
-                <canvas id="neuralCanvas"></canvas>
+                <div class="encircle ring-inner"></div>
+                <div class="encircle ring-static"></div>
+                <div id="orb" class="core-sphere">
+                    <div class="pulse-wave"></div>
+                </div>
             </div>
-
 
             <div class="voice-controls">
                 <button id="startBtn" class="big-trigger" onclick="toggleListening()">
@@ -68,71 +70,35 @@
         </section>
 
         <!-- RIGHT FLANK: DATA STREAM -->
-        <!-- RIGHT FLANK: ACTIVE MODULES -->
         <section class="panel right-panel">
             <div class="panel-header">
-                <span class="panel-title">/// MODULE OVERWATCH</span>
-                <div class="live-tag">ACTIVE</div>
+                <span class="panel-title">/// NEURAL STREAM</span>
+                <div class="live-tag">LIVE FEED</div>
             </div>
 
-            <!-- New Hexagon Hive -->
-            <!-- LIVE VISION MODULE -->
-            <div class="vision-container">
-                <div class="vision-header">NO SIGNAL</div>
-                <video id="liveFeed" autoplay playsinline muted></video>
-                <div class="vision-overlay"></div>
+            <div id="terminalWindow" class="terminal-scroller">
+                <!-- Logs injected here -->
             </div>
 
-            <div class="hex-grid-container">
-                <div class="hex-row">
-                    <div class="hex-wrapper" id="mod_cortex">
-                        <div class="hex-shape"></div>
-                        <div class="hex-icon"><i class="fas fa-brain"></i></div>
-                        <div class="hex-label">CORTEX</div>
-                    </div>
-                    <div class="hex-wrapper" id="mod_uplink">
-                        <div class="hex-shape"></div>
-                        <div class="hex-icon"><i class="fas fa-globe"></i></div>
-                        <div class="hex-label">UPLINK</div>
+            <div class="system-vitals">
+                <div class="vital-row">
+                    <span class="vital-label">CPU INTEGRITY</span>
+                    <div class="vital-bar">
+                        <div class="vital-fill" style="width: 14%"></div>
                     </div>
                 </div>
-                <div class="hex-row offset">
-                    <div class="hex-wrapper" id="mod_code">
-                        <div class="hex-shape"></div>
-                        <div class="hex-icon"><i class="fas fa-code"></i></div>
-                        <div class="hex-label">CODE</div>
-                    </div>
-                    <div class="hex-wrapper" id="mod_synth">
-                        <div class="hex-shape"></div>
-                        <div class="hex-icon"><i class="fas fa-wave-square"></i></div>
-                        <div class="hex-label">SYNTH</div>
-                    </div>
-                    <div class="hex-wrapper" id="mod_vision">
-                        <div class="hex-shape"></div>
-                        <div class="hex-icon"><i class="fas fa-eye"></i></div>
-                        <div class="hex-label">VISION</div>
+                <div class="vital-row">
+                    <span class="vital-label">RAM USAGE</span>
+                    <div class="vital-bar">
+                        <div class="vital-fill warning" style="width: 42%"></div>
                     </div>
                 </div>
-                <div class="hex-row">
-                    <div class="hex-wrapper" id="mod_secure">
-                        <div class="hex-shape active-green"></div> <!-- Always active -->
-                        <div class="hex-icon"><i class="fas fa-shield-alt"></i></div>
-                        <div class="hex-label">SECURE</div>
-                    </div>
-                    <div class="hex-wrapper" id="mod_memory">
-                        <div class="hex-shape active-dim"></div>
-                        <div class="hex-icon"><i class="fas fa-database"></i></div>
-                        <div class="hex-label">MEMORY</div>
-                    </div>
+                <div class="vital-row">
+                    <span class="vital-label">DOCKER SANDBOX</span>
+                    <span class="vital-text secure">SECURE // ENCRYPTED</span>
                 </div>
-            </div>
-
-            <!-- Mini Log Overlay (Optional, sleek) -->
-            <div id="statusOverlay" class="status-overlay">
-                WAITING FOR SIGNALS...
             </div>
         </section>
-
 
     </div>
 
@@ -150,7 +116,6 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/liquid_core.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
