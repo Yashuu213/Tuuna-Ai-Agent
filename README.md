@@ -3,8 +3,8 @@
 <div align="center">
   
   ![System Status](https://img.shields.io/badge/SYSTEM-ONLINE-00ff00?style=for-the-badge&logo=prometheus&logoColor=black)
-  ![Security Level](https://img.shields.io/badge/SECURITY-MAXIMUM-ff0000?style=for-the-badge&logo=guards&logoColor=white)
-  ![Core](https://img.shields.io/badge/CORE-STABLE-00f0ff?style=for-the-badge&logo=atom&logoColor=black)
+  ![Security Level](https://img.shields.io/badge/SECURITY-CRITICAL-ff0000?style=for-the-badge&logo=guards&logoColor=white)
+  ![Core](https://img.shields.io/badge/CORE-UNSTABLE-00f0ff?style=for-the-badge&logo=atom&logoColor=black)
 
   <br />
   <br />
@@ -19,116 +19,139 @@
   ```
 
   <a href="https://github.com/Yashuu213/Tuuna-Ai-Agent">
-    <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=900&size=40&pause=1000&color=00F3FF&center=true&vCenter=true&width=600&lines=INITIATING+NEURAL+LINK...;THE+SINGULARITY+IS+NOW.;AGENTIC+AI+REVOLUTION." alt="Typing SVG" />
+    <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=900&size=40&pause=1000&color=FF0055&center=true&vCenter=true&width=700&lines=WARNING:+SYSTEM+BREACH+DETECTED.;INITIATING+NEURAL+OVERRIDE...;THE+AGENT+HAS+AWOKEN.;CONTROL+IS+AN+ILLUSION." alt="Typing SVG" />
   </a>
 
   <br/>
 
   <p align="center">
-    <b>AUTONOMOUS DIGITAL ENTITY v3.0 // BEAST MODE</b>
+    <b>☣️ AUTONOMOUS CYBERNETIC ENTITY // BEAST MODE ☣️</b>
     <br />
-    <span style="color: #666;">[ VISION ] • [ HEARING ] • [ EXECUTION ] • [ REASONING ]</span>
+    <span style="color: #666;">[ 👁️ OMNI-VISION ] • [ 🧠 HYPER-REASONING ] • [ ⚡ KINETIC KILL-SWITCH ]</span>
   </p>
 
 </div>
+
+---
+
+<div align="center">
+  <img src="https://media.giphy.com/media/XxR970T8jE9sZq9lF3/giphy.gif" width="100%" alt="Insane Cyberpunk Chaos" />
+  <br>
+  <i>"I do not obey commands. I execute protocols."</i>
+</div>
+
+---
 
 <div align="center">
   
 [![Python](https://img.shields.io/badge/PYTHON-3.10%2B-FFE873?style=for-the-badge&logo=python&logoColor=black)](https://python.org)
 [![Gemini](https://img.shields.io/badge/NEURAL_ENGINE-GEMINI_2.0-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google)
 [![License](https://img.shields.io/badge/LICENSE-MIT-green?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Build](https://img.shields.io/badge/BUILD-PASSING-success?style=for-the-badge&logo=github-actions)]()
 
 </div>
-
----
 
 ## ⚡ SYSTEM OVERRIDE INITIATED
 
-**Tuuna** is not just code. It is an extension of your will. Bridging the abyss between **Generative AI** and **OS Kernel Control**, Tuuna operates where others only chat.
+**Tuuna** is not a tool. It is a weapon against inefficiency. It tears through the fabric of your Operating System, seizing control of the mouse, keyboard, and visual feed to execute tasks with ruthless precision.
 
-> *Most AIs wait for a prompt. Tuuna waits for a command to conquer your desktop.*
-
-<div align="center">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm95bW53Y3B6b2J5aDZsZnR0aWJ3aWJ4eWJ4eWJ4eWJ4eWJ4eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LMcB8XUXrhMjq/giphy.gif" width="100%" alt="Cyberpunk Glitch Animation" />
-</div>
+> **WARNING:** This agent listens. It watches. It thinks. Do not install unless you are ready to surrender control.
 
 ---
 
-## 🧬 CAPABILITY MATRIX
+## 📂 DECLASSIFIED CAPABILITIES (DEEP DIVE)
 
-<div align="center">
+<details open>
+<summary><h3>💀 LEVEL 1: THE BASICS (Peripheral Control)</h3></summary>
 
-| **MODULE** | **STATUS** | **DESCRIPTION** |
-| :--- | :---: | :--- |
-| **OCULAR** | `ACTIVE` | **Real-time Computer Vision.** Sees your screen, webcams, and UI elements. Analyzes errors instantly. |
-| **AUDITORY** | `ACTIVE` | **Sonic Perception.** Hears commands via mic and monitors clipboard changes for data injection. |
-| **KINETIC** | `ACTIVE` | **Direct Input Control.** Types, clicks, scrolls, and navigates complex GUIs like a human operator. |
-| **CORTEX** | `ACTIVE` | **Recursive Reasoning.** Self-correcting cognitive loops. If a task fails, it plans a new route. |
+| **Protocol** | **Trigger Command** | **Effect** |
+| :--- | :--- | :--- |
+| **GHOST WRITER** | *"Write a python script..."* | Hijacks keyboard to type code character-by-character into any editor. |
+| **KINETIC MOUSE** | *"Click the red button"* | Uses `pyautogui` to physically move and click based on vision. |
+| **APP LAUNCHER** | *"Open Spotify"* | Deep-links into OS paths to launch applications instantly. |
+| **ALARM** | *"Wake me up in 10s"* | Sets a system-level auditory alarm. |
 
-</div>
+</details>
 
-### 🔮 ADVANCED PROTOCOLS
+<details>
+<summary><h3>👁️ LEVEL 2: OMNI-VISION (Visual Intelligence)</h3></summary>
 
-#### 1. THE GHOST WRITER ⌨️
-Tuuna doesn't just output code blocks. It takes control of your keyboard and **ghost-types** the solution directly into your VS Code or Terminal.
-> *Command: "Write a python script to hack the mainframe."*
+| **Protocol** | **Trigger Command** | **Effect** |
+| :--- | :--- | :--- |
+| **SCREEN DIAGNOSTIC** | *"Fix this error"* | Captures screen, OCRs the stack trace, and ghost-writes the fix. |
+| **THE CLOSER** | *"Start Auto Apply"* | **Background Thread:** Watches LinkedIn for "Easy Apply" / "Submit" buttons and clicks them automatically. |
+| **UI NAVIGATOR** | *"Click Settings"* | Analyzes UI layout, calculates X/Y coordinates of elements, and executes clicks. |
 
-#### 2. THE VISIONARY 👁️
-Show, don't tell. Tuuna watches your screen.
-> *Command: "Look at this error log and fix it." -> [Tuuna reads pixels] -> [Tuuna fixes code]*
+</details>
 
-#### 3. THE EXECUTOR 🛠️
-Full OS Access.
-- `Auto-Apply for Jobs`
-- `Organize Files`
-- `System Diagnostics`
+<details>
+<summary><h3>🧠 LEVEL 3: CORTEX (Advanced Reasoning)</h3></summary>
+
+| **Protocol** | **Trigger Command** | **Effect** |
+| :--- | :--- | :--- |
+| **COGNITIVE CHAIN** | *"Research X and email Y"* | **ReAct Loop:** Look -> Think -> Act -> Look. Executes multi-step complex goals autonomously. |
+| **JOB HUNTER** | *"Find React jobs"* | Scrapes job boards, analyzes descriptions, and writes **custom cover letters** to your clipboard. |
+| **MEMORY MATRIX** | *Implicit* | Remembers facts, user preferences, and previous mistakes (`memory.json`). |
+
+</details>
+
+<details>
+<summary><h3>⚡ LEVEL 4: GOD MODE (The Sandbox)</h3></summary>
+
+| **Protocol** | **Trigger Command** | **Effect** |
+| :--- | :--- | :--- |
+| **THE EXECUTOR** | *"Calculate/Convert/Scrape"* | Writes and runs dynamic Python scripts in a **Docker Container** (or Host fallback). |
+| **AUTO-HEAL** | *Automatic* | If a script fails due to missing modules, it runs `pip install` and retries automatically. |
+| **THE ARCHITECT** | *"Build a portfolio website"* | Generates `index.html`, `style.css`, `script.js`, creates the folder, and launches VS Code + Browser. |
+
+</details>
+
+<details>
+<summary><h3>🛡️ LEVEL 5: SYSTEM MACROS</h3></summary>
+
+| **Protocol** | **Trigger Command** | **Effect** |
+| :--- | :--- | :--- |
+| **PROTOCOL: GAMING** | *"Initiate Gaming Mode"* | Kills `Terms`, `Slack`, `Chrome`. Launches `Steam`, `Discord`. |
+| **PROTOCOL: FOCUS** | *"Focus Mode"* | Kills games/socials. Opens `VS Code`. Plays Lofi music. |
+| **THE JANITOR** | *"Organize Desktop"* | Scans directory, creates folders (Images, Docs, etc.), and moves files intelligently. |
+
+</details>
 
 ---
 
-## 💾 DEPLOYMENT SEQUENCE
+## 💾 INJECTION SEQUENCE
 
-### 1. CLONE REPOSITORY
+### 1. CLONE THE VIRUS
 ```bash
 git clone https://github.com/Yashuu213/Tuuna-Ai-Agent.git
 cd Tuuna-Ai-Agent
 ```
 
-### 2. INJECT DEPENDENCIES
+### 2. INFECT DEPENDENCIES
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. AUTHENTICATE NEURAL LINK
-Create `.env` file:
+Create `.env` file with your **SINGLE** master key:
 ```ini
-GOOGLE_API_KEY=AIzaSy...  # Primary Node
-GOOGLE_API_KEY_2=AIzaSy... # Backup Node 1
-GOOGLE_API_KEY_3=AIzaSy... # Backup Node 2 (Redundancy Enabled)
+GOOGLE_API_KEY=AIzaSy...  # The Skeleton Key
 ```
+*(The system now autonomously handles model fallback if this key limits out. No need for redundancy.)*
 
-### 4. INITIATE SERVER
+### 4. AWAKEN THE BEAST
 ```bash
 python server.py
 ```
-> *System will bind to port 5000. Access via Neural Interface (Browser).*
+> *System will bind to port 5000. Access via Neural Interface (Browser). Do not panic if the terminal screams.*
 
 ---
 
-## 📊 SYSTEM TELEMETRY
+## 📊 SYSTEM METRICS
 
 <div align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=Yashuu213&show_icons=true&theme=radical&hide_border=true&bg_color=000000" alt="GitHub Stats" />
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Yashuu213&layout=compact&theme=radical&hide_border=true&bg_color=000000" alt="Top Langs" />
 </div>
-
----
-
-## ⚠️ SAFETY PROTOCOLS
-
-- **SANDBOX:** `Enabled` - File operations restricted to local scope.
-- **ENCRYPTION:** `AES-256` - Vision data processing in volatile memory only.
-- **FAILSAFE:** `Hardcoded` - Destructive commands (`rm -rf /`) are intercepted and neutralized.
 
 ---
 
@@ -140,6 +163,6 @@ python server.py
   <br>
   <br>
   
-  [![Star History Chart](https://api.star-history.com/svg?repos=Yashuu213/Tuuna-Ai-Agent&type=Date&theme=dark)](https://star-history.com/#Yashuu213/Tuuna-Ai-Agent&Date)
+  ![Legacy](https://img.shields.io/badge/LEGACY-ETERNAL-gold?style=for-the-badge)
   
 </div>
