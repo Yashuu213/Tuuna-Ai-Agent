@@ -295,7 +295,9 @@ setInterval(async () => {
                 }
                 if (log.type === 'error') {
                     activateHex('mod_secure', 1500);
-                    if (statusOverlay) statusOverlay.innerText = "ERROR: " + log.msg;
+                    // Hide raw error from UI, just show alert
+                    if (statusOverlay) statusOverlay.innerText = "SYSTEM ALERT: CHECK CONSOLE";
+                    console.error("BACKEND ERROR:", log.msg);
                 }
             });
         }

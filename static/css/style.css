@@ -23,8 +23,10 @@ body {
     background-color: var(--bg-void);
     color: white;
     font-family: var(--font-ui);
-    overflow: hidden;
-    height: 100vh;
+    overflow-y: auto;
+    /* Allow scrolling if needed */
+    overflow-x: hidden;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,9 +76,14 @@ body {
     display: grid;
     grid-template-columns: 25% 50% 25%;
     width: 95vw;
-    height: 90vh;
+    width: 95vw;
+    min-height: 90vh;
+    /* Allow growing */
+    height: auto;
     gap: 20px;
     z-index: 10;
+    margin: 20px auto;
+    /* Center it with spacing */
 }
 
 /* --- Panels --- */
@@ -90,6 +97,10 @@ body {
     /* Inner border spacing */
     position: relative;
     clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    height: 100%;
+    /* Fill grid cell */
+    min-height: 400px;
+    /* Minimum useful height */
 }
 
 

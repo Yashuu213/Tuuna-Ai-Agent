@@ -1,31 +1,46 @@
-import google.generativeai as genai
+
 import os
 import time
 from dotenv import load_dotenv
+from google import genai
+from google.genai import types
 
 load_dotenv()
-api_key = os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=api_key)
 
-models = [
-    'gemini-3-flash-preview',
-    'gemini-2.5-flash',
-    'gemini-2.0-flash-exp',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash' # Trying this again just in case
+# Updated Pool
+MODEL_POOL = [
+    'models/gemini-2.0-flash-lite', 
+    'models/gemini-1.5-flash',
+    'models/gemini-1.5-flash-8b',
+    'models/gemini-2.0-flash'
 ]
 
-print(f"{'MODEL':<25} | {'STATUS':<20}")
-print("-" * 50)
+def test_key(key, index):
+    if not key: return
+    masked = key[:6] + "..." + key[-4:]
+    print(f"\n🔍 Testing Key #{index}: {masked} against ALL models...")
+    
+    client = genai.Client(api_key=key)
+    
+    for model in MODEL_POOL:
+        try:
+            print(f"   👉 Testing {model}...", end="\r")
+            response = client.models.generate_content(
+                model=model,
+                contents='Hello'
+            )
+            print(f"   ✅ {model}: WORKING!             ")
+            return # Stop after first success per key if you just want to know if key allows ANY access
+        except Exception as e:
+            if "429" in str(e):
+                print(f"   ⚠️ {model}: QUOTA HIT          ")
+            else:
+                print(f"   ❌ {model}: FAILED ({e})")
 
-for m in models:
-    try:
-        model = genai.GenerativeModel(m)
-        model.generate_content("test")
-        print(f"{m:<25} | {'OK':<20}")
-    except Exception as e:
-        err = str(e)
-        status = "ERROR"
-        if "429" in err: status = "429 (QUOTA EXCEEDED)"
-        elif "404" in err: status = "404 (NOT FOUND)"
-        print(f"{m:<25} | {status:<20}")
+# Test Primary
+test_key(os.getenv("GOOGLE_API_KEY"), 1)
+
+# Test Others
+for i in range(2, 10):
+    k = os.getenv(f"GOOGLE_API_KEY_{i}")
+    if k: test_key(k, i)

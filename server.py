@@ -385,7 +385,8 @@ def ask_gemini_brain(user_command, client_image=None):
         return None, text # Treat as chat
         
     except Exception as e:
-        return None, f"I'm experiencing heavy traffic (Quota Exceeded) or API Error: {e}"
+        print(f"Server Error: {e}")
+        return None, "System Alert: My connection is a bit unstable. Give me a moment."
 
 
 @app.route('/')
@@ -423,5 +424,21 @@ def stream_logs():
     return jsonify(logs)
 
 if __name__ == '__main__':
-    print("Tuuna Ultimate AI Server Running (Beast Mode)...")
+    print("\n" + "="*50)
+    print("🚀 TUUNA AI SERVER (BEAST MODE) STARTING...")
+    print("="*50)
+    
+    # --- SELF TEST ---
+    print("🔎 Performing AI Logic Self-Test...")
+    try:
+        test_response = generate_content_with_retry("System Check")
+        if "System Alert" in test_response:
+            print(f"❌ AI SELF-TEST FAILED: {test_response}")
+            print(">> PLEASE CHECK YOUR .env FILE AND API KEYS <<")
+        else:
+            print("✅ AI Connection Established. Brain is Online.")
+    except Exception as e:
+        print(f"❌ AI CRITICAL ERROR: {e}")
+            
+    print("="*50 + "\n")
     app.run(port=5000, debug=True, use_reloader=False)
